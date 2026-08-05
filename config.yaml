@@ -1,0 +1,6 @@
+latitude: 10.7076
+longitude: 107.5017
+timezone: Asia/Ho_Chi_Minh
+forecast_days: 7
+display_days: 3
+model: ecmwf_ifs
