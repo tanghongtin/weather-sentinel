@@ -5,7 +5,7 @@ FIELDS = {
         "label": "Nhiệt độ",
         "icon": "🌡️",
         "unit": "°C",
-        "show": True
+        "show": False
     },
 
     "precipitation_probability": {
@@ -29,7 +29,7 @@ FIELDS = {
         "label": "Mây",
         "icon": "☁️",
         "unit": "%",
-        "show": True
+        "show": False
     },
 
     "wind_speed_10m": {
@@ -37,7 +37,7 @@ FIELDS = {
         "label": "Gió",
         "icon": "💨",
         "unit": "km/h",
-        "show": True
+        "show": False
     }
 
 }

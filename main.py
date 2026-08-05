@@ -1,8 +1,18 @@
 import yaml
 
 from weather.api import get_weather
-from notify.telegram import send_message
-from display.console import show_forecast
+from display.console import (
+    show_forecast,
+    build_forecast_text,
+)
+
+from notifier.telegram import send_message
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+telegram_token = os.getenv("TELEGRAM_TOKEN")
+telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
 def load_config():
 
@@ -23,8 +33,19 @@ def main():
     )
 
     show_forecast(
+    forecast,
+    config["display_days"]
+    )
+
+    text = build_forecast_text(
         forecast,
         config["display_days"]
+    )
+
+    send_message(
+        telegram_token,
+        telegram_chat_id,
+        text,
     )
 
 if __name__ == "__main__":

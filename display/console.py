@@ -6,12 +6,9 @@ from config.rules import MIN_RAIN_MM
 from config.fields import FIELDS
 
 
-def show_forecast(forecast, display_days):
+def build_forecast_text(forecast, display_days):
 
-    print("\n")
-    print("=" * 80)
-    print("FORECAST")
-    print("=" * 80)
+    lines = []
 
     end_time = forecast[0]["time"] + timedelta(days=display_days)
 
@@ -37,4 +34,16 @@ def show_forecast(forecast, display_days):
                 f"{value}{config['unit']}"
             )
 
-        print(text)
+        lines.append(text)
+
+    return "\n".join(lines)
+
+
+def show_forecast(forecast, display_days):
+
+    print()
+    print("=" * 80)
+    print("FORECAST")
+    print("=" * 80)
+
+    print(build_forecast_text(forecast, display_days))
