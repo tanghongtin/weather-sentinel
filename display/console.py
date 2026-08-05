@@ -1,49 +1,89 @@
-from datetime import timedelta
-from weather.formatter import format_datetime
+from datetime import datetime, timedelta
 
 from config.rules import MIN_RAIN_MM
 
-from config.fields import FIELDS
+
+MODEL_NAMES = {
+    "ecmwf_ifs": "ECMWF",
+    "dwd_icon_seamless": "ICON",
+    "ncep_gfs_seamless": "GFS",
+    "bom_access_global": "ACCESS",
+}
 
 
-def build_forecast_text(forecast, display_days):
+def format_datetime(dt: datetime):
+    return dt.strftime("%d/%m %H:%M")
+
+
+def build_forecast_text(forecasts, days):
+
+    if not forecasts:
+        return ""
 
     lines = []
 
-    end_time = forecast[0]["time"] + timedelta(days=display_days)
+    models = list(forecasts.keys())
+    base = forecasts[models[0]]
 
-    for hour in forecast:
+    end_time = base[0]["time"] + timedelta(days=days)
+    max_hours = min(len(f) for f in forecasts.values())
+
+    for i in range(max_hours):
+
+        hour = base[i]
 
         if hour["time"] >= end_time:
             break
 
-        if hour["rain"] < MIN_RAIN_MM:
+        agree = 0
+
+        for model in models:
+            rain = forecasts[model][i].get("rain")
+
+            if rain is not None and rain >= MIN_RAIN_MM:
+                agree += 1
+
+        if agree == 0:
             continue
 
-        text = format_datetime(hour["time"])
+        lines.append(f"🕒 {format_datetime(hour['time'])}")
+        lines.append("")
 
-        for config in FIELDS.values():
+        for model in models:
 
-            if not config["show"]:
-                continue
+            data = forecasts[model][i]
 
-            value = hour.get(config["key"])
+            name = MODEL_NAMES.get(model, model.upper())
 
-            text += (
-                f" | {config['icon']} "
-                f"{value}{config['unit']}"
+            rain = data.get("rain")
+            prob = data.get("probability")
+            low_cloud = data.get("cloud_low")
+            mid_cloud = data.get("cloud_mid")
+            cape = data.get("cape")
+
+            rain_text = "-" if rain is None else f"{rain:.1f}mm"
+            prob_text = "-" if prob is None else f"{prob}%"
+            low_cloud_text = "-" if low_cloud is None else f"{int(low_cloud)}%"
+            mid_cloud_text = "-" if mid_cloud is None else f"{int(mid_cloud)}%"
+            cape_text = "-" if cape is None else f"{int(cape)}"
+
+            lines.append(
+                f"{name:<6} "
+                f"{prob_text:<4} "
+                f"{rain_text:<6} "
+                f"{low_cloud_text:<4} "
+                f"{mid_cloud_text} "
+                #f"{cape_text:<5}"
             )
 
-        lines.append(text)
+        lines.append("")
+
+        lines.append(f"✅ Đồng thuận: {agree}/{len(models)}")
+        lines.append("─" * 20)
+        lines.append("")
 
     return "\n".join(lines)
 
 
-def show_forecast(forecast, display_days):
-
-    print()
-    print("=" * 80)
-    print("FORECAST")
-    print("=" * 80)
-
-    print(build_forecast_text(forecast, display_days))
+def show_forecast(forecasts, days):
+    print(build_forecast_text(forecasts, days))

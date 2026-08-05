@@ -12,7 +12,7 @@ def get_weather(
     longitude,
     timezone,
     forecast_days=7,
-    model="best_match"
+    model="auto"
 ):
 
     url = "https://api.open-meteo.com/v1/forecast"
@@ -22,21 +22,22 @@ def get_weather(
         "longitude": longitude,
         "hourly": HOURLY_FIELDS,
         "timezone": timezone,
-        "forecast_days": forecast_days,
-        "models": model
-        
+        "forecast_days": forecast_days
     }
 
-    response = requests.get(url, params=params)
+    if model and model.lower() != "auto":
+        params["models"] = model
 
+    response = requests.get(url, params=params)
     response.raise_for_status()
 
     data = response.json()
+    #print(data)
     hourly = data["hourly"]
 
     forecast = []
 
-    total_hours = len(hourly["time"]) - 96
+    total_hours = forecast_days * 24
     for i in range(total_hours):
 
         hour = {
@@ -44,7 +45,9 @@ def get_weather(
             "temperature": hourly["temperature_2m"][i],
             "probability": hourly["precipitation_probability"][i],
             "rain": hourly["precipitation"][i],
-            "cloud": hourly["cloud_cover"][i],
+            "cloud_low": hourly["cloud_cover_low"][i],
+            "cloud_mid": hourly["cloud_cover_mid"][i],
+            "cape": hourly["cape"][i],
             "wind": hourly["wind_speed_10m"][i],
         }
 

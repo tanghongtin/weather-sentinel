@@ -24,12 +24,25 @@ FIELDS = {
         "show": True
     },
 
-    "cloud_cover": {
-        "key": "cloud",
-        "label": "Mây",
-        "icon": "☁️",
+        "cloud_cover_low": {
+        "key": "cloud_low",
+        "icon": "☁️⬇️",
         "unit": "%",
-        "show": False
+        "show": True,
+    },
+
+    "cloud_cover_mid": {
+        "key": "cloud_mid",
+        "icon": "☁️↔️",
+        "unit": "%",
+        "show": True,
+    },
+
+    "cape": {
+        "key": "cape",
+        "icon": "⚡",
+        "unit": "J/kg",
+        "show": True,
     },
 
     "wind_speed_10m": {
