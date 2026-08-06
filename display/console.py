@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
-
-from config.rules import MIN_RAIN_MM
+from services.config_service import load_config
 
 
 MODEL_NAMES = {
@@ -16,7 +15,7 @@ def format_datetime(dt: datetime):
 
 
 def build_forecast_text(forecasts, days):
-
+    config = load_config()
     if not forecasts:
         return ""
 
@@ -40,7 +39,7 @@ def build_forecast_text(forecasts, days):
         for model in models:
             rain = forecasts[model][i].get("rain")
 
-            if rain is not None and rain >= MIN_RAIN_MM:
+            if rain is not None and rain >= config["min_rain_mm"]:
                 agree += 1
 
         if agree == 0:

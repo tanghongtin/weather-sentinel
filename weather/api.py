@@ -2,7 +2,6 @@ import requests
 from datetime import datetime
 
 from config.fields import FIELDS
-from config.rules import MIN_RAIN_MM
 
 HOURLY_FIELDS = list(FIELDS.keys())
 

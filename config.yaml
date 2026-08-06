@@ -2,7 +2,7 @@ latitude: 10.7076
 longitude: 107.5017
 timezone: Asia/Ho_Chi_Minh
 days: 1
+min_rain_mm: 0.5
 models:
   - ecmwf_ifs
   - dwd_icon_seamless
-  - ncep_gfs_seamless
