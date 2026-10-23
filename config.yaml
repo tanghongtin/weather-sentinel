@@ -1,0 +1,5 @@
+timezone: Asia/Ho_Chi_Minh
+days: 7
+min_rain_mm: 0.5
+rain_probability_threshold: 50
+model: ecmwf_ifs
