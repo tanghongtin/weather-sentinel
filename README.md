@@ -158,6 +158,21 @@ token, `chat_id`, kết nối mạng và cấu hình trước khi tạo lịch t
 
 ### 5. Lên lịch chạy mỗi ngày bằng cron
 
+Nếu terminal báo `crontab: command not found`, cài và bật dịch vụ cron:
+
+```bash
+sudo apt update
+sudo apt install -y cron
+sudo systemctl enable --now cron
+```
+
+Kiểm tra lệnh đã khả dụng:
+
+```bash
+command -v crontab
+systemctl status cron --no-pager
+```
+
 Mở crontab của tài khoản đang chạy dự án:
 
 ```bash
